@@ -1,115 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <base target="_top">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-         
-        <!--##JAVASCRIPT FUNCTIONS ---------------------------------------------------- -->
-        <script>
-          //PREVENT FORMS FROM SUBMITTING / PREVENT DEFAULT BEHAVIOUR
-          function preventFormSubmit() {
-            var forms = document.querySelectorAll('form');
-            for (var i = 0; i < forms.length; i++) {
-              forms[i].addEventListener('submit', function(event) {
-              event.preventDefault();
-              });
-            }
-          }
-          window.addEventListener("load", preventFormSubmit, true); 
-              
-           
-          //HANDLE FORM SUBMISSION
-          function handleFormSubmit(formObject) {
-            google.script.run.withSuccessHandler(createTable).processForm(formObject);
-            document.getElementById("search-form").reset();
-          }
-         
-          //CREATE THE DATA TABLE
-          function createTable(dataArray) {
-            if(dataArray && dataArray !== undefined && dataArray.length != 0){
-              var result = "<table class='table table-sm table-striped' id='dtable' style='font-size:0.8em'>"+
-                           "<thead style='white-space: nowrap'>"+
-                             "<tr>"+                               //Change table headings to match witht he Google Sheet
-                              "<th scope='col'>ORDERNUMBER</th>"+
-                              "<th scope='col'>QUANTITYORDERED</th>"+
-                              "<th scope='col'>PRICEEACH</th>"+
-                              "<th scope='col'>ORDERLINENUMBER</th>"+
-                              "<th scope='col'>SALES</th>"+
-                              "<th scope='col'>ORDERDATE</th>"+
-                              "<th scope='col'>STATUS</th>"+
-                              "<th scope='col'>QTR_ID</th>"+
-                              "<th scope='col'>MONTH_ID</th>"+
-                              "<th scope='col'>YEAR_ID</th>"+
-                              "<th scope='col'>PRODUCTLINE</th>"+
-                              "<th scope='col'>MSRP</th>"+
-                              "<th scope='col'>PRODUCTCODE</th>"+
-                              "<th scope='col'>CUSTOMERNAME</th>"+
-                              "<th scope='col'>PHONE</th>"+
-                              "<th scope='col'>ADDRESSLINE1</th>"+
-                              "<th scope='col'>ADDRESSLINE2</th>"+
-                              "<th scope='col'>CITY</th>"+
-                              "<th scope='col'>STATE</th>"+
-                              "<th scope='col'>POSTALCODE</th>"+
-                              "<th scope='col'>COUNTRY</th>"+
-                              "<th scope='col'>TERRITORY</th>"+
-                              "<th scope='col'>CONTACTLASTNAME</th>"+
-                              "<th scope='col'>CONTACTFIRSTNAME</th>"+
-                              "<th scope='col'>DEALSIZE</th>"+
-                            "</tr>"+
-                          "</thead>";
-              for(var i=0; i<dataArray.length; i++) {
-                  result += "<tr>";
-                  for(var j=0; j<dataArray[i].length; j++){
-                      result += "<td>"+dataArray[i][j]+"</td>";
-                  }
-                  result += "</tr>";
-              }
-              result += "</table>";
-              var div = document.getElementById('search-results');
-              div.innerHTML = result;
-            }else{
-              var div = document.getElementById('search-results');
-              //div.empty()
-              div.innerHTML = "Data not found!";
-            }
-          }
-        </script>
-        <!--##JAVASCRIPT FUNCTIONS ~ END ---------------------------------------------------- -->
-         
-    </head>
-    <body>
-        <div class="container">
-            <br>
-            <div class="row">
-              <div class="col">
-             
-                  <!-- ## SEARCH FORM ------------------------------------------------ -->
-                  <form id="search-form" class="form-inline" onsubmit="handleFormSubmit(this)">
-                    <div class="form-group mb-2">
-                      <label for="searchtext">Search Text</label>
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <input type="text" class="form-control" id="searchtext" name="searchtext" placeholder="Search Text">
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Search</button>
-                  </form>
-                  <!-- ## SEARCH FORM ~ END ------------------------------------------- -->
-               
-              </div>    
-            </div>
-            <div class="row">
-              <div class="col">
-             
-                <!-- ## TABLE OF SEARCH RESULTS ------------------------------------------------ -->
-                <div id="search-results" class="table-responsive">
-                  <!-- The Data Table is inserted here by JavaScript -->
-                </div>
-                <!-- ## TABLE OF SEARCH RESULTS ~ END ------------------------------------------------ -->
-                   
-              </div>
-            </div>
-        </div>
-    </body>
+  <body>
+    <p id="food"></p>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script type="text/javascript">
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
+
+      function init() {
+        Papa.parse(public_spreadsheet_url, {
+          download: true,
+          header: true,
+          complete: showInfo
+        })
+      }
+
+      window.addEventListener('DOMContentLoaded', init)
+
+      function showInfo(results) {
+        var data = results.data
+
+        // data comes through as a simple array since simpleSheet is turned on
+        alert("Successfully processed " + data.length + " rows!")
+        document.getElementById("food").innerHTML = "<strong>Foods:</strong> " + [ data[0].Name, data[1].Name, data[2].Name ].join(", ");
+        console.log(data);
+      }
+
+      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
+    </script>
+    <p><strong>This example is only going to work if it's on the internet or on a local server!</strong> To run a local server, run "terminal" or "command prompt" and run the command <code>python -m http.server</code> or <code>python -m SimpleHTTPServer</code> (whichever one works, really, and you might even need to <a href="http://littlecolumns.com/tools/python-wrangler/">install Python</a>). Then visit <a href="http://localhost:8000/">http://localhost:8000</a> and you'll be all set.</p>
+  </body>
 </html>
