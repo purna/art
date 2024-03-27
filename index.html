@@ -108,7 +108,11 @@
                 imageElement.src = 'https://drive.google.com/thumbnail?id='+ extractGoogleDriveFileID(item['Id'])+'&amp;authuser=0&amp;sz=w200';
                 imageElement.classList.add('img-fluid');
 
-
+                var downloadLink = document.createElement('a');
+                downloadLink.href = imageUrl;
+                downloadLink.textContent = 'Download Image';
+                downloadLink.download = item.Name + '.jpg';
+                downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
 
                 var container = document.createElement('div');
                 container.classList.add('border', 'p-3');
