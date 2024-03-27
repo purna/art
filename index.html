@@ -74,7 +74,7 @@
             var loadingDiv = document.getElementById('loading');
             loadingDiv.classList.remove('d-none');
 
-            Papa.parse('YOUR_GOOGLE_SPREADSHEET_URL', {
+            Papa.parse(public_spreadsheet_url, {
                 download: true,
                 header: true,
                 complete: function(results) {
