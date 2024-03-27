@@ -129,6 +129,8 @@
                 container.classList.add('border', 'p-3');
                 container.appendChild(nameElement);
                 container.appendChild(figure);
+                container.innerHTML += '<div class="clearfix"></div>'; // Add clearfix class
+
                 container.appendChild(downloadLink);
 
                 resultsDiv.appendChild(container);
