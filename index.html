@@ -101,9 +101,11 @@
                 var nameElement = document.createElement('p');
                 nameElement.textContent = "Name: " + item.Name;
 
+
                 var imageElement = document.createElement('img');
-                imageElement.src = item['Image'];  //Thumbnail needs to be updated every 30mins in the spreadsheet
-                imageElement.classList.add('img-fluid', 'mb-3');
+                // Fix for cross-origin requests when loading images from Google Drive
+                imageElement.src = 'https://drive.google.com/uc?id=' + extractGoogleDriveFileID(item['Image']);
+                imageElement.classList.add('img-fluid');
 
                 var container = document.createElement('div');
                 container.classList.add('border', 'p-3');
@@ -112,6 +114,11 @@
 
                 resultsDiv.appendChild(container);
             });
+        }
+
+      function extractGoogleDriveFileID(url) {
+            var match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
+            return match ? match[1] : url;
         }
     </script>
 
