@@ -102,7 +102,7 @@
                 nameElement.textContent = "Name: " + item.Name;
 
                 var imageElement = document.createElement('img');
-                imageElement.src = item['Thumbnail']; // Use item['Upload Image:'] to access the 'Upload Image' field
+                imageElement.src = item['Image'];  //Thumbnail needs to be updated every 30mins in the spreadsheet
                 imageElement.classList.add('img-fluid', 'mb-3');
 
                 var container = document.createElement('div');
