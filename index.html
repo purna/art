@@ -50,6 +50,23 @@
             --background-color: #343a40;
             --text-color: #ffffff;
         }
+
+        /* Masonry layout */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-item {
+            margin-bottom: 20px;
+        }
+
+        .grid-item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    
     </style>
   </head>
   <body>
@@ -109,7 +126,14 @@
               <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div id="results"></div>
+      
+        <!-- Search results -->
+        <div id="results" class="mt-3 grid"></div>
+        <div id="noResults" class="alert alert-warning mt-3 d-none">
+            No results found.
+        </div>
+
+   
     </div>
 
     <script>
@@ -201,6 +225,18 @@
             document.body.classList.add('dark-mode');
         });
       
+    </script>
+
+    <!-- Masonry JavaScript library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+    <script>
+        // Initialize Masonry grid
+        var grid = document.querySelector('.grid');
+        var masonry = new Masonry(grid, {
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            gutter: 20
+        });
     </script>
 
    
