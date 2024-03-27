@@ -87,7 +87,7 @@
     </form>
     <div id="results"></div>
 
-    <script>
+   <script>
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
             var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -109,20 +109,19 @@
             resultsDiv.innerHTML = '';
 
             var filteredData = data.filter(function(item) {
-                return item.Description.toLowerCase().includes(keyword);
+                return item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             });
 
             filteredData.forEach(function(item) {
-                var imageElement = document.createElement('img');
-                imageElement.src = item.ImageURL;
-                imageElement.alt = item.Description;
+                var nameElement = document.createElement('p');
+                nameElement.textContent = "Name: " + item.Name;
 
-                var descriptionElement = document.createElement('p');
-                descriptionElement.textContent = item.Description;
+                var imageElement = document.createElement('img');
+                imageElement.src = item['Upload Image:']; // Use item['Upload Image:'] to access the 'Upload Image' field
 
                 var container = document.createElement('div');
+                container.appendChild(nameElement);
                 container.appendChild(imageElement);
-                container.appendChild(descriptionElement);
 
                 resultsDiv.appendChild(container);
             });
