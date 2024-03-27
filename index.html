@@ -172,6 +172,7 @@
 
             filteredData.forEach(function(item) {
                 var nameElement = document.createElement('h3');
+                nameElement.classList.add('card-title');
                 nameElement.textContent = "Name: " + item.Name;
 
                 var imageElement = document.createElement('img');
@@ -181,8 +182,9 @@
                 imageElement.src = imageUrl;
                 imageElement.classList.add('figure-img', 'img-fluid', 'rounded');
 
+    
                 var figure = document.createElement('figure');
-                figure.classList.add('figure');
+                figure.classList.add('figure', 'card-body'>);
 
                 var figCaption = document.createElement('figcaption');
                 figCaption.classList.add('figure-caption');
@@ -199,13 +201,14 @@
                 downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
 
                 var container = document.createElement('div');
-                container.classList.add('card', 'border', 'p-3');
+                container.classList.add('card', 'border');
                 container.appendChild(nameElement);
-                container.appendChild(figure);
+                container.appendChild(card);
+              
                 container.innerHTML += '<div class="clearfix"></div>'; // Add clearfix class
-
+                container.appendChild(figure);
                 container.appendChild(downloadLink);
-
+              
                 resultsDiv.appendChild(container);
             });
         }
