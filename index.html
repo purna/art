@@ -104,7 +104,7 @@
 
                 var imageElement = document.createElement('img');
                 // Fix for cross-origin requests when loading images from Google Drive
-                imageElement.src = 'https://drive.google.com/uc?id=' + extractGoogleDriveFileID(item['Image']);
+                imageElement.src = 'https://drive.google.com/uc?id=' + extractGoogleDriveFileID(item['Id']);
                 imageElement.classList.add('img-fluid');
 
                 var container = document.createElement('div');
