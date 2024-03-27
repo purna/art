@@ -109,6 +109,16 @@
                 imageElement.src = imageUrl;
                 imageElement.classList.add('img-fluid');
 
+                var figure = document.createElement('figure');
+                figure.classList.add('figure');
+
+                var figCaption = document.createElement('figcaption');
+                figCaption.classList.add('figure-caption');
+                figCaption.textContent = item.Name;
+
+                figure.appendChild(imageElement);
+                figure.appendChild(figCaption);
+
                 var downloadLink = document.createElement('a');
                 downloadLink.href = imageUrl;
                 downloadLink.textContent = 'Download Image';
@@ -118,7 +128,7 @@
                 var container = document.createElement('div');
                 container.classList.add('border', 'p-3');
                 container.appendChild(nameElement);
-                container.appendChild(imageElement);
+                container.appendChild(figure);
                 container.appendChild(downloadLink);
 
                 resultsDiv.appendChild(container);
