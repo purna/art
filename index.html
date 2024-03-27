@@ -106,7 +106,7 @@
                 var driveFileID = extractGoogleDriveFileID(item['Id']);
                 var imageUrl = 'https://drive.google.com/thumbnail?id='+ driveFileID +'&amp;authuser=0&amp;sz=w200';
                 imageElement.src = imageUrl;
-                imageElement.classList.add('img-fluid');
+                imageElement.classList.add('figure-img img-fluid rounded');
 
                 var figure = document.createElement('figure');
                 figure.classList.add('figure');
