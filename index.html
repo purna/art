@@ -98,9 +98,8 @@
             }
 
             filteredData.forEach(function(item) {
-                var nameElement = document.createElement('p');
+                var nameElement = document.createElement('h3');
                 nameElement.textContent = "Name: " + item.Name;
-
 
                 var imageElement = document.createElement('img');
                 // Fix for cross-origin requests when loading images from Google Drive
@@ -120,7 +119,8 @@
                 figure.appendChild(figCaption);
 
                 var downloadLink = document.createElement('a');
-                downloadLink.href = imageUrl;
+                var downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
+                downloadLink.href = downloadUrl;
                 downloadLink.textContent = 'Download Image';
                 downloadLink.download = item.Name + '.jpg';
                 downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
