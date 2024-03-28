@@ -22,18 +22,9 @@
         <p id="food"></p>
         <script type="text/javascript">
 
-            var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
+            const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
+            let cachedData = null;
             // var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
-
-            function init() {
-                Papa.parse(public_spreadsheet_url, {
-                    download: true,
-                    header: true,
-                    complete: showInfo
-                })
-            }
-
-            window.addEventListener('DOMContentLoaded', init)
 
             function showInfo(results) {
                 var data = results.data
@@ -44,15 +35,28 @@
                 console.log(data);
             }
 
+            function init() {
+                Papa.parse(public_spreadsheet_url, {
+                    download: true,
+                    header: true,
+                    complete: (results) => {
+                        cachedData = results;
+                        showInfo(results);
+                    }
+                })
+            }
+
+            window.addEventListener('DOMContentLoaded', init)
+
             document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
         </script>
-        <p><strong>This example is only going to work if it's on the internet or on a local server!</strong> To run a local server, run "terminal" or "command prompt" and run the command <code>python -m http.server</code> or <code>python -m SimpleHTTPServer</code> (whichever one works, really, and you might even need to <a href="http://littlecolumns.com/tools/python-wrangler/">install Python</a>). Then visit <a href="http://localhost:8000/">http://localhost:8000</a> and you'll be all set.</p>
 
+        <p>
+            <strong>This example is only going to work if it's on the internet or on a local server!</strong> To run a local server, run "terminal" or "command prompt" and run the command <code>python -m http.server</code> or <code>python -m SimpleHTTPServer</code> (whichever one works, really, and you might even need to <a href="http://littlecolumns.com/tools/python-wrangler/">install Python</a>). Then visit <a href="http://localhost:8000/">http://localhost:8000</a> and you'll be all set.
+        </p>
 
 
         <h1 class="mt-5">Google Spreadsheet Search</h1>
-
-
 
         <form id="searchForm" class="mb-4">
             <div class="input-group">
@@ -62,6 +66,7 @@
                 </div>
             </div>
         </form>
+
         <div id="loading" class="text-center d-none">
             <div class="spinner-border text-secondary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -85,17 +90,8 @@
         });
 
         function searchGoogleSpreadsheet(keyword) {
-            var loadingDiv = document.getElementById('loading');
-            loadingDiv.classList.remove('d-none');
-
-            Papa.parse(public_spreadsheet_url, {
-                download: true,
-                header: true,
-                complete: function (results) {
-                    loadingDiv.classList.add('d-none');
-                    displayResults(results.data, keyword);
-                }
-            });
+            if (!cachedData) return alert('Data not loaded yet. Please try again.');
+            displayResults(cachedData.data, keyword);
         }
 
         function displayResults(data, keyword) {
