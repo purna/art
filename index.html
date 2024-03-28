@@ -18,42 +18,11 @@
             <button type="button" class="btn btn-secondary" id="darkModeBtn">Dark Mode</button>
         </div>
 
-
         <p id="food"></p>
-        <script type="text/javascript">
-
-            const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
-            let cachedData = null;
-            // var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
-
-            const showInfo = (results) => {
-                const data = results.data ?? [];
-                // data comes through as a simple array since simpleSheet is turned on
-                alert("Successfully processed " + data.length + " rows!")
-                document.getElementById("food").innerHTML = "<strong>Example:</strong> " + [data[0].Name, data[1].Name, data[2].Name].join(", ");
-                console.log(data);
-            }
-
-            const init = () => {
-                Papa.parse(public_spreadsheet_url, {
-                    download: true,
-                    header: true,
-                    complete: (results) => {
-                        cachedData = results;
-                        showInfo(results);
-                    }
-                })
-            }
-
-            window.addEventListener('DOMContentLoaded', init)
-
-            document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
-        </script>
 
         <p>
             <strong>This example is only going to work if it's on the internet or on a local server!</strong> To run a local server, run "terminal" or "command prompt" and run the command <code>python -m http.server</code> or <code>python -m SimpleHTTPServer</code> (whichever one works, really, and you might even need to <a href="http://littlecolumns.com/tools/python-wrangler/">install Python</a>). Then visit <a href="http://localhost:8000/">http://localhost:8000</a> and you'll be all set.
         </p>
-
 
         <h1 class="mt-5">Google Spreadsheet Search</h1>
 
@@ -74,37 +43,46 @@
 
         <!-- Search results -->
         <div id="results" class="row mt-3 grid" data-masonry='{"percentPosition": true }'></div>
+
         <div id="noResults" class="alert alert-warning mt-3 d-none">
             No results found.
         </div>
-
-
     </div>
 
     <script>
-        document.getElementById('searchForm').addEventListener('submit', (event) => {
-            event.preventDefault();
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            searchGoogleSpreadsheet(searchTerm);
-        });
+        const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
+        let cachedData = null;
 
-        const searchGoogleSpreadsheet = (keyword) => {
-            if (!cachedData) return alert('Data not loaded yet. Please try again.');
-            displayResults(cachedData.data, keyword);
+        const showInfo = (results) => {
+            const data = results.data ?? [];
+            // data comes through as a simple array since simpleSheet is turned on
+            alert(`Successfully processed ${data.length} rows!`)
+            document.getElementById("food").innerHTML = `<strong>Example:</strong> ${[data[0].Name, data[1].Name, data[2].Name].join(", ")}`;
+            console.log(data);
+        }
+
+        const init = () => {
+            Papa.parse(public_spreadsheet_url, {
+                download: true,
+                header: true,
+                complete: (results) => {
+                    cachedData = results;
+                    showInfo(results);
+                }
+            })
         }
 
         const displayResults = (data, keyword) => {
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
 
+            // Filter data based on keyword, this checks if the keyword is present in the Name or Theme columns
             const filteredData = data.filter((item) => {
                 return item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             });
 
-            if (filteredData.length === 0) {
-                resultsDiv.innerHTML = '<p class="alert alert-warning">No results found.</p>';
-                return;
-            }
+            // If no results found, display a message
+            if (filteredData.length === 0) return resultsDiv.innerHTML = '<p class="alert alert-warning">No results found.</p>';
 
             filteredData.forEach((item) => {
                 const nameElement = document.createElement('h3');
@@ -153,6 +131,18 @@
             return match ? match[1] : url;
         }
 
+        const searchGoogleSpreadsheet = (keyword) => {
+            if (!cachedData) return alert('Data not loaded yet. Please try again.');
+            displayResults(cachedData.data, keyword);
+        }
+
+        // Search form submission
+        document.getElementById('searchForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            searchGoogleSpreadsheet(searchTerm);
+        });
+
         // Toggle between light mode and dark mode
         document.getElementById('lightModeBtn').addEventListener('click', () => {
             document.body.classList.remove('dark-mode');
@@ -162,6 +152,7 @@
             document.body.classList.add('dark-mode');
         });
 
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 
     <!-- Masonry JavaScript library -->
@@ -174,8 +165,6 @@
             gutter: 20
         });
     </script>
-
-
 </body>
 
 </html>
