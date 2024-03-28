@@ -27,7 +27,7 @@
             // var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
 
             function showInfo(results) {
-                var data = results.data
+                const data = results.data ?? [];
 
                 // data comes through as a simple array since simpleSheet is turned on
                 alert("Successfully processed " + data.length + " rows!")
@@ -85,7 +85,7 @@
     <script>
         document.getElementById('searchForm').addEventListener('submit', function (event) {
             event.preventDefault();
-            var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             searchGoogleSpreadsheet(searchTerm);
         });
 
@@ -95,10 +95,10 @@
         }
 
         function displayResults(data, keyword) {
-            var resultsDiv = document.getElementById('results');
+            const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
 
-            var filteredData = data.filter(function (item) {
+            const filteredData = data.filter(function (item) {
                 return item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             });
 
@@ -108,36 +108,36 @@
             }
 
             filteredData.forEach(function (item) {
-                var nameElement = document.createElement('h3');
+                const nameElement = document.createElement('h3');
                 nameElement.classList.add('card-title');
                 nameElement.textContent = "Name: " + item.Name;
 
-                var imageElement = document.createElement('img');
+                const imageElement = document.createElement('img');
                 // Fix for cross-origin requests when loading images from Google Drive
-                var driveFileID = extractGoogleDriveFileID(item['Id']);
-                var imageUrl = 'https://drive.google.com/thumbnail?id=' + driveFileID + '&amp;authuser=0&amp;sz=w200';
+                const driveFileID = extractGoogleDriveFileID(item['Id']);
+                const imageUrl = 'https://drive.google.com/thumbnail?id=' + driveFileID + '&amp;authuser=0&amp;sz=w200';
                 imageElement.src = imageUrl;
                 imageElement.classList.add('figure-img', 'img-fluid', 'rounded');
 
 
-                var figure = document.createElement('figure');
+                const figure = document.createElement('figure');
                 figure.classList.add('figure', 'card-body');
 
-                var figCaption = document.createElement('figcaption');
+                const figCaption = document.createElement('figcaption');
                 figCaption.classList.add('figure-caption');
                 figCaption.textContent = item.Name;
 
                 figure.appendChild(imageElement);
                 figure.appendChild(figCaption);
 
-                var downloadLink = document.createElement('a');
-                var downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
+                const downloadLink = document.createElement('a');
+                const downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
                 downloadLink.href = downloadUrl;
                 downloadLink.textContent = 'Download Image';
                 downloadLink.download = item.Name + '.jpg';
                 downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
 
-                var container = document.createElement('div');
+                const container = document.createElement('div');
                 container.classList.add('card', 'border');
                 container.appendChild(nameElement);
 
@@ -150,10 +150,9 @@
         }
 
         function extractGoogleDriveFileID(url) {
-            var match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
+            const match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
             return match ? match[1] : url;
         }
-
 
         // Toggle between light mode and dark mode
         document.getElementById('lightModeBtn').addEventListener('click', function () {
@@ -170,8 +169,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
     <script>
         // Initialize Masonry grid
-        var grid = document.querySelector('.grid');
-        var masonry = new Masonry(grid, {
+        const masonry = new Masonry(document.querySelector('.grid'), {
             itemSelector: '.grid-item',
             columnWidth: '.grid-sizer',
             gutter: 20
