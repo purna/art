@@ -110,12 +110,12 @@
             filteredData.forEach(function (item) {
                 const nameElement = document.createElement('h3');
                 nameElement.classList.add('card-title');
-                nameElement.textContent = "Name: " + item.Name;
+                nameElement.textContent = `Name: ${item.Name ?? 'N/A'}`;
 
                 const imageElement = document.createElement('img');
                 // Fix for cross-origin requests when loading images from Google Drive
                 const driveFileID = extractGoogleDriveFileID(item['Id']);
-                const imageUrl = 'https://drive.google.com/thumbnail?id=' + driveFileID + '&amp;authuser=0&amp;sz=w200';
+                const imageUrl = `https://drive.google.com/thumbnail?id=${driveFileID}&amp;authuser=0&amp;sz=w200`;
                 imageElement.src = imageUrl;
                 imageElement.classList.add('figure-img', 'img-fluid', 'rounded');
 
@@ -125,16 +125,16 @@
 
                 const figCaption = document.createElement('figcaption');
                 figCaption.classList.add('figure-caption');
-                figCaption.textContent = item.Name;
+                figCaption.textContent = item.Name ?? 'image';
 
                 figure.appendChild(imageElement);
                 figure.appendChild(figCaption);
 
                 const downloadLink = document.createElement('a');
-                const downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
+                const downloadUrl = `https://drive.google.com/uc?id=${driveFileID}&export=download`;
                 downloadLink.href = downloadUrl;
                 downloadLink.textContent = 'Download Image';
-                downloadLink.download = item.Name + '.jpg';
+                downloadLink.download = `${item.Name ?? 'image'}.jpg`;
                 downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
 
                 const container = document.createElement('div');
