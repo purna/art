@@ -26,16 +26,15 @@
             let cachedData = null;
             // var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
 
-            function showInfo(results) {
+            const showInfo = (results) => {
                 const data = results.data ?? [];
-
                 // data comes through as a simple array since simpleSheet is turned on
                 alert("Successfully processed " + data.length + " rows!")
                 document.getElementById("food").innerHTML = "<strong>Example:</strong> " + [data[0].Name, data[1].Name, data[2].Name].join(", ");
                 console.log(data);
             }
 
-            function init() {
+            const init = () => {
                 Papa.parse(public_spreadsheet_url, {
                     download: true,
                     header: true,
@@ -83,22 +82,22 @@
     </div>
 
     <script>
-        document.getElementById('searchForm').addEventListener('submit', function (event) {
+        document.getElementById('searchForm').addEventListener('submit', (event) => {
             event.preventDefault();
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             searchGoogleSpreadsheet(searchTerm);
         });
 
-        function searchGoogleSpreadsheet(keyword) {
+        const searchGoogleSpreadsheet = (keyword) => {
             if (!cachedData) return alert('Data not loaded yet. Please try again.');
             displayResults(cachedData.data, keyword);
         }
 
-        function displayResults(data, keyword) {
+        const displayResults = (data, keyword) => {
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
 
-            const filteredData = data.filter(function (item) {
+            const filteredData = data.filter((item) => {
                 return item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             });
 
@@ -107,7 +106,7 @@
                 return;
             }
 
-            filteredData.forEach(function (item) {
+            filteredData.forEach((item) => {
                 const nameElement = document.createElement('h3');
                 nameElement.classList.add('card-title');
                 nameElement.textContent = `Name: ${item.Name ?? 'N/A'}`;
@@ -149,17 +148,17 @@
             });
         }
 
-        function extractGoogleDriveFileID(url) {
+        const extractGoogleDriveFileID = (url) => {
             const match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
             return match ? match[1] : url;
         }
 
         // Toggle between light mode and dark mode
-        document.getElementById('lightModeBtn').addEventListener('click', function () {
+        document.getElementById('lightModeBtn').addEventListener('click', () => {
             document.body.classList.remove('dark-mode');
         });
 
-        document.getElementById('darkModeBtn').addEventListener('click', function () {
+        document.getElementById('darkModeBtn').addEventListener('click', () => {
             document.body.classList.add('dark-mode');
         });
 
