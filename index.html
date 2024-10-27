@@ -125,14 +125,14 @@
     // Add more test entries as needed
 ];
 
-  console.log("Filtered Data:", data);
+  console.log("Filtered Data:", testData);
 
 
-  var filteredData = data.filter(function(item) {
-    var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
-    var matchesOrientation = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.toLowerCase();
-    var matchesDifficulty = difficulty === "" || item.Difficulty == difficulty;
-    return matchesKeyword && matchesOrientation && matchesDifficulty;
+  var filteredData2 = testData.filter(function(item) {
+    var matchesKeyword2 = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
+    var matchesOrientation2 = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.toLowerCase();
+    var matchesDifficulty2 = difficulty === "" || item.Difficulty == difficulty;
+    return matchesKeyword2 && matchesOrientation2 && matchesDifficulty2;
 });
 
   console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
