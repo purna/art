@@ -67,181 +67,167 @@
             display: block;
         }
     
-    </style>
-  </head>
-  <body>
- <div class="container mt-5">
-     <!-- Mode switch buttons -->
-        <div class="btn-group mt-3" role="group" aria-label="Mode Switch">
-            <button type="button" class="btn btn-primary" id="lightModeBtn">Light Mode</button>
-            <button type="button" class="btn btn-secondary" id="darkModeBtn">Dark Mode</button>
-        </div>
+   </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mt-5">Google Spreadsheet Search</h1>
 
-    
-    <p id="food"></p>
-    <script type="text/javascript">
-
-     var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
-     // var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRB4E_6RnpLP1wWMjqcwsUvotNATB8Np3OntlXb7066ULcAHI9oqqRhucltFifPTYNd7DRNRE56oTdt/pub?output=csv';
-
-      function init() {
-        Papa.parse(public_spreadsheet_url, {
-          download: true,
-          header: true,
-          complete: showInfo
-        })
-      }
-
-      window.addEventListener('DOMContentLoaded', init)
-
-      function showInfo(results) {
-        var data = results.data
-
-        // data comes through as a simple array since simpleSheet is turned on
-        alert("Successfully processed " + data.length + " rows!")
-        document.getElementById("food").innerHTML = "<strong>Example:</strong> " + [ data[0].Name, data[1].Name, data[2].Name ].join(", ");
-        console.log(data);
-      }
-
-      document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");        
-    </script>
-    <p><strong>This example is only going to work if it's on the internet or on a local server!</strong> To run a local server, run "terminal" or "command prompt" and run the command <code>python -m http.server</code> or <code>python -m SimpleHTTPServer</code> (whichever one works, really, and you might even need to <a href="http://littlecolumns.com/tools/python-wrangler/">install Python</a>). Then visit <a href="http://localhost:8000/">http://localhost:8000</a> and you'll be all set.</p>
-
-  
-
-        <h1 class="mt-5">Google Spreadsheet Search</h1>
-
-   
-   
-        <form id="searchForm" class="mb-4">
-            <div class="input-group">
-                <input type="text" id="searchInput" class="form-control" placeholder="Enter keyword">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
-            </div>
-        </form>
-        <div id="loading" class="text-center d-none">
-           <div class="spinner-border text-secondary" role="status">
-              <span class="visually-hidden">Loading...</span>
+    <form id="searchForm" class="mb-4">
+        <div class="input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Enter keyword">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
-      
-        <!-- Search results -->
-        <div id="results" class="row mt-3 grid" data-masonry='{"percentPosition": true }'></div>
-        <div id="noResults" class="alert alert-warning mt-3 d-none">
-            No results found.
+        
+        <!-- Orientation filter -->
+        <div class="mb-3">
+            <label for="orientationSelect" class="form-label">Orientation</label>
+            <select id="orientationSelect" class="form-select">
+                <option value="">All</option>
+                <option value="Portrait">Portrait</option>
+                <option value="Landscape">Landscape</option>
+            </select>
         </div>
 
-   
+        <!-- Difficulty filter -->
+        <div class="mb-3">
+            <label for="difficultySelect" class="form-label">Difficulty</label>
+            <select id="difficultySelect" class="form-select">
+                <option value="">All</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+    </form>
+
+    <div id="loading" class="text-center d-none">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            searchGoogleSpreadsheet(searchTerm);
+    <!-- Search results -->
+    <div id="results" class="row mt-3 grid" data-masonry='{"percentPosition": true }'></div>
+    <div id="noResults" class="alert alert-warning mt-3 d-none">
+        No results found.
+    </div>
+</div>
+
+<script>
+    var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDkvQQFQ_7x5bSb2q2eGwxuRJ-Wf50de_Wp1Kbf5F0I_h3M1fAnnLJfGzmP3reraU6SiM0qrKBw1s6/pub?gid=1048722892&single=true&output=csv';
+
+    function init() {
+        Papa.parse(public_spreadsheet_url, {
+            download: true,
+            header: true,
+            complete: showInfo
         });
+    }
 
-        function searchGoogleSpreadsheet(keyword) {
-            var loadingDiv = document.getElementById('loading');
-            loadingDiv.classList.remove('d-none');
+    window.addEventListener('DOMContentLoaded', init);
 
-            Papa.parse(public_spreadsheet_url, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    loadingDiv.classList.add('d-none');
-                    displayResults(results.data, keyword);
-                }
-            });
-        }
+    function showInfo(results) {
+        alert("Successfully processed " + results.data.length + " rows!");
+    }
 
-        function displayResults(data, keyword) {
-            var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        var selectedOrientation = document.getElementById('orientationSelect').value;
+        var selectedDifficulty = document.getElementById('difficultySelect').value;
+        searchGoogleSpreadsheet(searchTerm, selectedOrientation, selectedDifficulty);
+    });
 
-            var filteredData = data.filter(function(item) {
-                return item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
-            });
+    function searchGoogleSpreadsheet(keyword, orientation, difficulty) {
+        var loadingDiv = document.getElementById('loading');
+        loadingDiv.classList.remove('d-none');
 
-            if (filteredData.length === 0) {
-                resultsDiv.innerHTML = '<p class="alert alert-warning">No results found.</p>';
-                return;
+        Papa.parse(public_spreadsheet_url, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                loadingDiv.classList.add('d-none');
+                displayResults(results.data, keyword, orientation, difficulty);
             }
+        });
+    }
 
-            filteredData.forEach(function(item) {
-                var nameElement = document.createElement('h3');
-                nameElement.classList.add('card-title');
-                nameElement.textContent = "Name: " + item.Name;
+    function displayResults(data, keyword, orientation, difficulty) {
+        var resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
 
-                var imageElement = document.createElement('img');
-                // Fix for cross-origin requests when loading images from Google Drive
-                var driveFileID = extractGoogleDriveFileID(item['Id']);
-                var imageUrl = 'https://drive.google.com/thumbnail?id='+ driveFileID +'&amp;authuser=0&amp;sz=w200';
-                imageElement.src = imageUrl;
-                imageElement.classList.add('figure-img', 'img-fluid', 'rounded');
+        var filteredData = data.filter(function(item) {
+            var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
+            var matchesOrientation = orientation === "" || item.Orientation === orientation;
+            var matchesDifficulty = difficulty === "" || item.Difficulty == difficulty;
+            return matchesKeyword && matchesOrientation && matchesDifficulty;
+        });
 
-    
-                var figure = document.createElement('figure');
-                figure.classList.add('figure', 'card-body');
-
-                var figCaption = document.createElement('figcaption');
-                figCaption.classList.add('figure-caption');
-                figCaption.textContent = item.Name;
-
-                figure.appendChild(imageElement);
-                figure.appendChild(figCaption);
-
-                var downloadLink = document.createElement('a');
-                var downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
-                downloadLink.href = downloadUrl;
-                downloadLink.textContent = 'Download Image';
-                downloadLink.download = item.Name + '.jpg';
-                downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
-
-                var container = document.createElement('div');
-                container.classList.add('card', 'border');
-                container.appendChild(nameElement);
-              
-                container.innerHTML += '<div class="clearfix"></div>'; // Add clearfix class
-                container.appendChild(figure);
-                container.appendChild(downloadLink);
-              
-                resultsDiv.appendChild(container);
-            });
+        if (filteredData.length === 0) {
+            resultsDiv.innerHTML = '<p class="alert alert-warning">No results found.</p>';
+            return;
         }
 
-      function extractGoogleDriveFileID(url) {
-            var match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
-            return match ? match[1] : url;
-        }
+        filteredData.forEach(function(item) {
+            // Your existing code to display results
+            var nameElement = document.createElement('h3');
+            nameElement.classList.add('card-title');
+            nameElement.textContent = "Name: " + item.Name;
 
+            var imageElement = document.createElement('img');
+            var driveFileID = extractGoogleDriveFileID(item['Id']);
+            var imageUrl = 'https://drive.google.com/thumbnail?id=' + driveFileID + '&amp;authuser=0&amp;sz=w200';
+            imageElement.src = imageUrl;
+            imageElement.classList.add('figure-img', 'img-fluid', 'rounded');
 
-       // Toggle between light mode and dark mode
-        document.getElementById('lightModeBtn').addEventListener('click', function() {
-            document.body.classList.remove('dark-mode');
+            var figure = document.createElement('figure');
+            figure.classList.add('figure', 'card-body');
+
+            var figCaption = document.createElement('figcaption');
+            figCaption.classList.add('figure-caption');
+            figCaption.textContent = item.Name;
+
+            figure.appendChild(imageElement);
+            figure.appendChild(figCaption);
+
+            var downloadLink = document.createElement('a');
+            var downloadUrl = 'https://drive.google.com/uc?id=' + driveFileID + '&export=download';
+            downloadLink.href = downloadUrl;
+            downloadLink.textContent = 'Download Image';
+            downloadLink.download = item.Name + '.jpg';
+            downloadLink.classList.add('btn', 'btn-primary', 'mt-2');
+
+            var container = document.createElement('div');
+            container.classList.add('card', 'border');
+            container.appendChild(nameElement);
+            container.innerHTML += '<div class="clearfix"></div>'; // Add clearfix class
+            container.appendChild(figure);
+            container.appendChild(downloadLink);
+
+            resultsDiv.appendChild(container);
         });
+    }
 
-        document.getElementById('darkModeBtn').addEventListener('click', function() {
-            document.body.classList.add('dark-mode');
-        });
-      
-    </script>
+    function extractGoogleDriveFileID(url) {
+        var match = url.match(/\/(?:open|uc)\?id=([^&]+)/);
+        return match ? match[1] : url;
+    }
+</script>
 
-    <!-- Masonry JavaScript library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
-    <script>
-        // Initialize Masonry grid
-        var grid = document.querySelector('.grid');
-        var masonry = new Masonry(grid, {
-            itemSelector: '.grid-item',
-            columnWidth: '.grid-sizer',
-            gutter: 20
-        });
-    </script>
-
-   
+<!-- Masonry JavaScript library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+<script>
+    // Initialize Masonry grid
+    var grid = document.querySelector('.grid');
+    var masonry = new Masonry(grid, {
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-sizer',
+        gutter: 20
+    });
+</script>
 </body>
 </html>
     
