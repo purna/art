@@ -161,7 +161,6 @@
 
     function displayResults(data, keyword, orientation, difficulty) {
 
-      console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
 
         var resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
@@ -173,7 +172,6 @@
 
             return matchesKeyword && matchesOrientation && matchesDifficulty;
 
-            console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
         });
 
         if (filteredData.length === 0) {
