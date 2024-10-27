@@ -162,7 +162,7 @@
 
         var filteredData = data.filter(function(item) {
             var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
-            var matchesOrientation = orientation === "" || item.Orientation === orientation;
+            var matchesOrientation = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.toLowerCase();
             var matchesDifficulty = difficulty === "" || item.Difficulty == difficulty;
             return matchesKeyword && matchesOrientation && matchesDifficulty;
         });
