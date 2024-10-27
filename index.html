@@ -139,6 +139,7 @@
         var searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
         var selectedOrientation = document.getElementById('orientationSelect').value;
         var selectedDifficulty = document.getElementById('difficultySelect').value;
+      
         searchGoogleSpreadsheet(searchTerm, selectedOrientation, selectedDifficulty);
 
     });
@@ -161,7 +162,8 @@
 
     function displayResults(data, keyword, orientation, difficulty) {
 
-
+        console.log("Filtered Data:", data);
+      
         var resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
 
@@ -169,6 +171,9 @@
             var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             var matchesOrientation = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.trim().toLowerCase();
             var matchesDifficulty = difficulty === "" || item.Difficulty == difficulty;
+          
+            console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
+
 
             return matchesKeyword && matchesOrientation && matchesDifficulty;
 
