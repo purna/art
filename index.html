@@ -163,10 +163,36 @@
         });
     }
 
-    function displayResults(data, keyword, orientation, difficulty) {
-      
-        var resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '';
+function displayResults(data, keyword, orientation, difficulty) {
+    console.log("Full Data:", data); // Log full data
+    console.log("Orientation Filter:", orientation); // Log selected orientation
+
+    var resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    var filteredData = data.filter(function(item) {
+        console.log("Item Orientation:", item.Orientation); // Log item orientation
+        var matchesKeyword = 
+            item.Name.toLowerCase().includes(keyword) || 
+            item.Theme.toLowerCase().includes(keyword);
+
+        var matchesOrientation = 
+            orientation === "" || 
+            item.Orientation.trim().toLowerCase() === orientation.toLowerCase();
+
+        var matchesDifficulty = 
+            difficulty === "" || 
+            item.Difficulty == difficulty;
+
+        console.log("Matches:", matchesKeyword, matchesOrientation, matchesDifficulty); // Log matching status
+        return matchesKeyword && matchesOrientation && matchesDifficulty;
+    });
+
+    if (filteredData.length === 0) {
+        resultsDiv.innerHTML = '<p class="alert alert-warning">No results found.</p>';
+        return;
+    }
+
 
         var filteredData = data.filter(function(item) {
             var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
