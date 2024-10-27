@@ -167,30 +167,14 @@
         var resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
 
-        var testData = [
-            { Name: "Test 1", Orientation: "Portrait", Difficulty: "1" },
-            { Name: "Test 2", Orientation: "Landscape", Difficulty: "2" },
-            { Name: "Test 3", Orientation: "portrait", Difficulty: "3" },
-        ];
-      
-      var filteredData2 = testData.filter(function(item) {
-          console.log("Item Orientation:", item.Orientation); // Check hardcoded data
-          var matchesOrientation = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.toLowerCase();
-          return matchesOrientation; // Simplified for testing
-      });
-
        console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
-
 
         var filteredData = data.filter(function(item) {
             var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
             var matchesOrientation = orientation === "" || item.Orientation.trim().toLowerCase() === orientation.trim().toLowerCase();
             var matchesDifficulty = difficulty === "" || item.Difficulty == difficulty;
-          
-
 
             return matchesKeyword && matchesOrientation && matchesDifficulty;
-
         });
 
         if (filteredData.length === 0) {
