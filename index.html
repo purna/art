@@ -164,13 +164,9 @@
     }
 
     function displayResults(data, keyword, orientation, difficulty) {
-
-        console.log("Filtered Data:", data);
       
         var resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
-
-       console.log("Orientation Filter:", orientation, "Item Orientation:", item.Orientation.trim().toLowerCase());
 
         var filteredData = data.filter(function(item) {
             var matchesKeyword = item.Name.toLowerCase().includes(keyword) || item.Theme.toLowerCase().includes(keyword);
